@@ -3,6 +3,7 @@ package com.example.virtualmuseum.domain.repository
 import com.example.virtualmuseum.data.remote.dto.*
 import com.example.virtualmuseum.utils.Resource
 import kotlinx.coroutines.flow.Flow
+import com.example.virtualmuseum.data.remote.dto.DeleteCommentRequest
 
 /**
  * Interface định nghĩa các phương thức để lấy dữ liệu cho ứng dụng.
@@ -17,4 +18,7 @@ interface MuseumRepository {
     fun createComment(request: CreateCommentRequest): Flow<Resource<CommentDto>>
     fun addFavorite(request: FavoriteRequest): Flow<Resource<Unit>>
     fun removeFavorite(request: FavoriteRequest): Flow<Resource<Unit>>
+    fun deleteComment(request: DeleteCommentRequest): Flow<Resource<Unit>>
+    fun addOrUpdateReaction(request: AddReactionRequest): Flow<Resource<ReactionDto>>
+    fun deleteReaction(request: DeleteReactionRequest): Flow<Resource<Unit>>
 }

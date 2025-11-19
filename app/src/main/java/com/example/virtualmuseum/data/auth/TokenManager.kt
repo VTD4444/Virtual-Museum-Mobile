@@ -12,15 +12,27 @@ object TokenManager {
     // UI có thể "lắng nghe" luồng này để biết khi nào trạng thái đăng nhập thay đổi
     val isLoggedInFlow = _token.map { it != null }
 
+    private var _userId: Int? = null
+
     fun saveToken(token: String) {
         _token.value = token
     }
 
-    fun clearToken() {
-        _token.value = null
-    }
-
     fun getToken(): String? {
         return _token.value
+    }
+
+    fun saveUserId(id: Int) {
+        _userId = id
+    }
+
+    fun getUserId(): Int? {
+        return _userId
+    }
+
+    // Cập nhật clearToken để xóa cả userId
+    fun clearToken() {
+        _token.value = null
+        _userId = null
     }
 }

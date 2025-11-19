@@ -13,5 +13,8 @@ data class FossilDetailState(
     val isPostingComment: Boolean = false,
     val isTogglingFavorite: Boolean = false,
 
-    val showLoginDialog: Boolean = false
+    val showLoginDialog: Boolean = false,
+    // Comment đang được trả lời (null nếu là comment mới)
+    val replyingTo: CommentDto? = null,
+    val isDeletingComment: Boolean = false
 )

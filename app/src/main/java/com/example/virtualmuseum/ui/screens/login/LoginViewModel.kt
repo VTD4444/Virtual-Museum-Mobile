@@ -57,6 +57,12 @@ class LoginViewModel : ViewModel() {
                     resource.data?.token?.let {
                         TokenManager.saveToken(it)
                     }
+
+                    resource.data?.let { data ->
+                        TokenManager.saveToken(data.token)
+                        TokenManager.saveUserId(data.user.userId) // <-- LƯU USER ID
+                    }
+
                     _state.update {
                         it.copy(
                             isLoading = false,

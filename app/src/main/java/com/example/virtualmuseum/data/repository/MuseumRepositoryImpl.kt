@@ -115,6 +115,22 @@ class MuseumRepositoryImpl (
         }
     }
 
+    override fun deleteComment(request: DeleteCommentRequest): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.deleteComment(request)
+            if (response.success) {
+                emit(Resource.Success(Unit))
+            } else {
+                emit(Resource.Error(response.message))
+            }
+        } catch (e: HttpException) {
+            emit(Resource.Error(e.localizedMessage ?: "Lỗi HTTP"))
+        } catch (e: IOException) {
+            emit(Resource.Error("Lỗi kết nối mạng"))
+        }
+    }
+
     override fun addFavorite(request: FavoriteRequest): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading())
         try {
@@ -135,6 +151,38 @@ class MuseumRepositoryImpl (
         emit(Resource.Loading())
         try {
             val response = apiService.removeFavorite(request)
+            if (response.success) {
+                emit(Resource.Success(Unit))
+            } else {
+                emit(Resource.Error(response.message))
+            }
+        } catch (e: HttpException) {
+            emit(Resource.Error(e.localizedMessage ?: "Lỗi HTTP"))
+        } catch (e: IOException) {
+            emit(Resource.Error("Lỗi kết nối mạng"))
+        }
+    }
+
+    override fun addOrUpdateReaction(request: AddReactionRequest): Flow<Resource<ReactionDto>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.addOrUpdateReaction(request)
+            if (response.success && response.data != null) {
+                emit(Resource.Success(response.data))
+            } else {
+                emit(Resource.Error(response.message))
+            }
+        } catch (e: HttpException) {
+            emit(Resource.Error(e.localizedMessage ?: "Lỗi HTTP"))
+        } catch (e: IOException) {
+            emit(Resource.Error("Lỗi kết nối mạng"))
+        }
+    }
+
+    override fun deleteReaction(request: DeleteReactionRequest): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.deleteReaction(request)
             if (response.success) {
                 emit(Resource.Success(Unit))
             } else {

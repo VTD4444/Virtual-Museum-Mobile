@@ -115,7 +115,7 @@ interface MuseumApiService {
      * API Thêm hoặc sửa reaction cho một bình luận.
      * Yêu cầu xác thực, AuthInterceptor sẽ xử lý.
      */
-    @POST("reactions")
+    @POST("reactions/create-reaction")
     suspend fun addOrUpdateReaction(
         @Body request: AddReactionRequest
     ): ApiResponse<ReactionDto>

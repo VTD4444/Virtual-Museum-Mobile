@@ -70,4 +70,5 @@
     <string name="add_to_favorites">Thêm vào yêu thích</string>
     <string name="remove_from_favorites">Xóa khỏi yêu thích</string>
     <string name="info_likes">Lượt thích</string>
+    <string name="comment_toxic_warning">Bình luận bị ẩn do chứa nội dung không phù hợp.</string>
 </resources>
