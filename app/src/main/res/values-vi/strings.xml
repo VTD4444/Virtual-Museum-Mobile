@@ -71,4 +71,11 @@
     <string name="remove_from_favorites">Xóa khỏi yêu thích</string>
     <string name="info_likes">Lượt thích</string>
     <string name="comment_toxic_warning">Bình luận bị ẩn do chứa nội dung không phù hợp.</string>
+    <string name="account_title">Tài khoản</string>
+    <string name="hello_user">Xin chào, Bạn!</string>
+    <string name="account_history_title">Lịch sử tương tác</string>
+    <string name="account_history_subtitle">Xem yêu thích và bình luận</string>
+    <string name="account_change_password">Đổi mật khẩu</string>
+    <string name="not_logged_in_title">Bạn chưa đăng nhập</string>
+    <string name="not_logged_in_desc">Đăng nhập để lưu yêu thích, bình luận và đồng bộ dữ liệu.</string>
 </resources>

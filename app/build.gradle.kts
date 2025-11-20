@@ -44,6 +44,12 @@ android {
 dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.webkit:webkit:1.11.0")
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.mlkit.barcode.scanning)
+    implementation(libs.guava)
 
     // Thư viện này giúp tạo animation dễ dàng hơn (tùy chọn nhưng khuyến khích)
     implementation("com.google.accompanist:accompanist-navigation-animation:0.32.0")

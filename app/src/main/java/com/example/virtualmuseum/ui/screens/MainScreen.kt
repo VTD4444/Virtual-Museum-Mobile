@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavGraph.Companion.findStartDestination
 
 @Composable
 fun MainScreen(
@@ -51,12 +52,28 @@ fun MainScreen(
     // Hàm saveMapToDownloads (giữ nguyên)
     fun saveMapToDownloads() { /* ... */ }
 
+    // Hàm tiện ích để điều hướng trong BottomBar và Drawer
+    fun navigateToTab(route: String) {
+        innerNavController.navigate(route) {
+            // Pop up to the start destination of the graph to
+            // avoid building up a large stack of destinations
+            popUpTo(innerNavController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            // Avoid multiple copies of the same destination when
+            // reselecting the same item
+            launchSingleTop = true
+            // Restore state when reselecting a previously selected item
+            restoreState = true
+        }
+    }
+
     // --- Cấu hình cho Bottom Bar ---
     val bottomNavItems = listOf(
         BottomNavItem(stringResource(id = R.string.bottom_nav_home), Icons.Default.Home, Screen.Home.route),
-        BottomNavItem(stringResource(id = R.string.bottom_nav_explore), Icons.Default.Explore, Screen.History.route),
-        BottomNavItem("Quét QR", Icons.Default.QrCodeScanner, Screen.ScanQR.route),
-        BottomNavItem("Tài khoản", Icons.Default.AccountCircle, Screen.Account.route)
+        BottomNavItem(stringResource(id = R.string.bottom_nav_explore), Icons.Default.Explore, Screen.Fossils.route),
+        BottomNavItem(stringResource(id = R.string.home_scan_qr), Icons.Default.QrCodeScanner, Screen.ScanQR.route),
+        BottomNavItem(stringResource(id = R.string.menu_account), Icons.Default.AccountCircle, Screen.Account.route)
     )
     val navBackStackEntry by innerNavController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -69,9 +86,22 @@ fun MainScreen(
                     DrawerContent(
                         isLoggedIn = isLoggedIn, // <-- Truyền trạng thái
                         navController = rootNavController, // <-- Truyền NavController gốc
+                        // 2. CẤU HÌNH NAVIGATION CHO DRAWER (MENU)
+                        onExploreClick = {
+                            scope.launch { drawerState.close() }
+                            navigateToTab(Screen.Fossils.route) // Điều hướng đến trang Fossils
+                        },
                         onMapClick = {
                             scope.launch { drawerState.close() }
                             showMapDialog = true
+                        },
+                        onHistoryClick = {
+                            scope.launch { drawerState.close() }
+                            navigateToTab(Screen.History.route)
+                        },
+                        onAccountClick = {
+                            scope.launch { drawerState.close() }
+                            navigateToTab(Screen.Account.route)
                         },
                         onCloseDrawer = {
                             scope.launch { drawerState.close() }
@@ -120,6 +150,13 @@ fun MainScreen(
                         modifier = Modifier.padding(innerPadding),
                         onFossilClick = { fossilId ->
                             rootNavController.navigate(Screen.FossilDetail.createRoute(fossilId))
+                        },
+                        // --- THÊM 2 DÒNG NÀY ---
+                        onLoginClick = {
+                            rootNavController.navigate(Screen.Login.route)
+                        },
+                        onRegisterClick = {
+                            rootNavController.navigate(Screen.Register.route)
                         }
                     )
                 }

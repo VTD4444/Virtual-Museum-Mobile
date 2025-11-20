@@ -7,15 +7,21 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.virtualmuseum.ui.screens.account.AccountScreen
+import com.example.virtualmuseum.ui.screens.account.ChangePasswordScreen
+import com.example.virtualmuseum.ui.screens.account.HistoryScreen
 import com.example.virtualmuseum.ui.screens.detail.FossilDetailScreen
 import com.example.virtualmuseum.ui.screens.home.HomeScreen
 import com.example.virtualmuseum.ui.screens.fossils.FossilsScreen
+import com.example.virtualmuseum.ui.screens.scan.ScanQRScreen
 
 @Composable
 fun MainNavGraph(
     innerNavController: NavHostController,
     modifier: Modifier = Modifier,
-    onFossilClick: (String) -> Unit
+    onFossilClick: (String) -> Unit,
+    onLoginClick: () -> Unit,
+    onRegisterClick: () -> Unit
 ) {
     NavHost(
         navController = innerNavController,
@@ -28,24 +34,35 @@ fun MainNavGraph(
         composable(Screen.Fossils.route) {
             FossilsScreen(
                 navController = innerNavController,
-                onFossilClick = onFossilClick
             )
         }
         composable(Screen.ScanQR.route) {
-            // TODO: Tạo ScanQRScreen()
+            ScanQRScreen(navController = innerNavController)
         }
-        composable(Screen.History.route) {
-            // TODO: Tạo HistoryScreen()
-        }
-        composable(Screen.Account.route) {
-            // TODO: Tạo AccountScreen()
-        }
-        // Thêm màn hình chi tiết
+
         composable(
             route = Screen.FossilDetail.route,
             arguments = listOf(navArgument("fossilId") { type = NavType.StringType })
         ) {
             FossilDetailScreen(navController = innerNavController)
+        }
+
+        composable(Screen.ChangePassword.route) {
+            ChangePasswordScreen(navController = innerNavController)
+        }
+
+        composable(Screen.History.route) {
+            // Truyền AccountViewModel nếu muốn dùng chung instance,
+            // hoặc để nó tự tạo mới như mặc định trong HistoryScreen
+            HistoryScreen(navController = innerNavController)
+        }
+
+        composable(Screen.Account.route) {
+            AccountScreen(
+                navController = innerNavController,
+                onLoginClick = onLoginClick,       // <-- Truyền xuống
+                onRegisterClick = onRegisterClick  // <-- Truyền xuống
+            )
         }
     }
 }

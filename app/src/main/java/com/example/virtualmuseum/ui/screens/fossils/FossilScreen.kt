@@ -24,7 +24,6 @@ import com.example.virtualmuseum.ui.navigation.Screen
 @Composable
 fun FossilsScreen(
     navController: NavController,
-    onFossilClick: (String) -> Unit,
     vm: FossilsViewModel = viewModel()
 ) {
     val state by vm.state.collectAsState()
@@ -69,7 +68,7 @@ fun FossilsScreen(
                         fossilOrigin = fossil.origin, // <-- PASS ORIGIN HERE
                         fossilImageUrl = fossil.imageUrl,
                         onClick = {
-                            onFossilClick(fossil.fossilId)
+                            navController.navigate(Screen.FossilDetail.createRoute(fossil.fossilId))
                         }
                     )
                 }

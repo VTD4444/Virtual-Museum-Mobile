@@ -194,4 +194,40 @@ class MuseumRepositoryImpl (
             emit(Resource.Error("Lỗi kết nối mạng"))
         }
     }
+
+    override fun changePassword(request: ChangePasswordRequest): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.changePassword(request)
+            if (response.success) {
+                emit(Resource.Success(Unit))
+            } else {
+                emit(Resource.Error(response.message))
+            }
+        } catch (e: Exception) { /* ... catch lỗi ... */ }
+    }
+
+    override fun getFavorites(language: String): Flow<Resource<List<FavoriteFossilDto>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.getFavorites(language = language)
+            if (response.success) {
+                emit(Resource.Success(response.data ?: emptyList()))
+            } else {
+                emit(Resource.Error(response.message))
+            }
+        } catch (e: Exception) { /* ... */ }
+    }
+
+    override fun getCommentHistory(): Flow<Resource<List<CommentHistoryDto>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.getCommentHistory()
+            if (response.success) {
+                emit(Resource.Success(response.data ?: emptyList()))
+            } else {
+                emit(Resource.Error(response.message))
+            }
+        } catch (e: Exception) { /* ... */ }
+    }
 }

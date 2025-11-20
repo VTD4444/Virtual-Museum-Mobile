@@ -64,7 +64,7 @@ data class ChangePasswordRequest(
  */
 data class FavoriteFossilDto(
     @SerializedName("fossil_id")
-    val fossilId: Int,
+    val fossilId: String,
     val name: String,
     val origin: String,
     @SerializedName("image_url")

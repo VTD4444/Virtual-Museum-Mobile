@@ -20,7 +20,10 @@ import com.example.virtualmuseum.ui.navigation.Screen
 fun DrawerContent(
     isLoggedIn: Boolean,
     navController: NavController,
+    onExploreClick: () -> Unit,
     onMapClick: () -> Unit,
+    onHistoryClick: () -> Unit,
+    onAccountClick: () -> Unit,
     onCloseDrawer: () -> Unit,
     onLogout: () -> Unit
 ) {
@@ -55,7 +58,7 @@ fun DrawerContent(
             NavigationDrawerItem(
                 label = { Text(stringResource(id = R.string.menu_explore)) },
                 selected = false,
-                onClick = { /* TODO: Điều hướng đến Khám phá */ },
+                onClick = onExploreClick,
                 icon = { Icon(Icons.Default.Explore, null) }
             )
             NavigationDrawerItem(
@@ -70,13 +73,13 @@ fun DrawerContent(
                 NavigationDrawerItem(
                     label = { Text(stringResource(id = R.string.menu_account)) },
                     selected = false,
-                    onClick = { /* TODO: Điều hướng đến Tài khoản */ },
+                    onClick = onAccountClick, // <-- GỌI HÀM NÀY
                     icon = { Icon(Icons.Default.AccountCircle, null) }
                 )
                 NavigationDrawerItem(
                     label = { Text(stringResource(id = R.string.menu_history)) },
                     selected = false,
-                    onClick = { /* TODO: Điều hướng đến Lịch sử */ },
+                    onClick = onHistoryClick, // <-- GỌI HÀM NÀY
                     icon = { Icon(Icons.Default.History, null) }
                 )
             }

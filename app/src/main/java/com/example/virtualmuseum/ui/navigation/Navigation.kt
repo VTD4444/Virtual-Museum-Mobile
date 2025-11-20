@@ -33,13 +33,5 @@ fun Navigation() {
         composable(route = Screen.Home.route) {
             MainScreen(rootNavController = navController)
         }
-
-        composable(
-            route = Screen.FossilDetail.route,
-            arguments = listOf(navArgument("fossilId") { type = NavType.StringType })
-        ) {
-            // Truyền rootNavController vào
-            FossilDetailScreen(navController = navController)
-        }
     }
 }

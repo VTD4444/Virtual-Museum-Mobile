@@ -71,4 +71,11 @@
     <string name="remove_from_favorites">Remove from favorites</string>
     <string name="info_likes">Likes</string>
     <string name="comment_toxic_warning">Comment hidden due to inappropriate content.</string>
+    <string name="account_title">Account</string>
+    <string name="hello_user">Hello, User!</string>
+    <string name="account_history_title">Interaction History</string>
+    <string name="account_history_subtitle">View favorites and comments</string>
+    <string name="account_change_password">Change Password</string>
+    <string name="not_logged_in_title">You are not logged in</string>
+    <string name="not_logged_in_desc">Login to save favorites, comments and sync data.</string>
 </resources>
