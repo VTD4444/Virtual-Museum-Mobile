@@ -137,4 +137,12 @@ interface MuseumApiService {
         @Path("fossilId") fossilId: String,
         @Header("accept-language") language: String
     ): ApiResponse<FossilDetailData> // Kiểu trả về từ API doc
+
+    /**
+     * API Lấy danh sách tin tức.
+     */
+    @GET("news/getAll")
+    suspend fun getNews(
+        @Header("accept-language") language: String
+    ): ApiResponse<List<NewsDto>>
 }

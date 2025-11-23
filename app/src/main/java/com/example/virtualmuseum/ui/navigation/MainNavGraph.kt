@@ -13,6 +13,7 @@ import com.example.virtualmuseum.ui.screens.account.HistoryScreen
 import com.example.virtualmuseum.ui.screens.detail.FossilDetailScreen
 import com.example.virtualmuseum.ui.screens.home.HomeScreen
 import com.example.virtualmuseum.ui.screens.fossils.FossilsScreen
+import com.example.virtualmuseum.ui.screens.news.NewsDetailScreen
 import com.example.virtualmuseum.ui.screens.scan.ScanQRScreen
 
 @Composable
@@ -63,6 +64,13 @@ fun MainNavGraph(
                 onLoginClick = onLoginClick,       // <-- Truyền xuống
                 onRegisterClick = onRegisterClick  // <-- Truyền xuống
             )
+        }
+
+        composable(
+            route = Screen.NewsDetail.route,
+            arguments = listOf(androidx.navigation.navArgument("newsId") { type = androidx.navigation.NavType.IntType })
+        ) {
+            NewsDetailScreen(navController = innerNavController)
         }
     }
 }

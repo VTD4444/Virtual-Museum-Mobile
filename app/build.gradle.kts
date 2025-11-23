@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.mlkit.barcode.scanning)
     implementation(libs.guava)
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Thư viện này giúp tạo animation dễ dàng hơn (tùy chọn nhưng khuyến khích)
     implementation("com.google.accompanist:accompanist-navigation-animation:0.32.0")

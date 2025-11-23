@@ -22,8 +22,7 @@ interface MuseumRepository {
     fun addOrUpdateReaction(request: AddReactionRequest): Flow<Resource<ReactionDto>>
     fun deleteReaction(request: DeleteReactionRequest): Flow<Resource<Unit>>
     fun changePassword(request: ChangePasswordRequest): Flow<Resource<Unit>>
-
     fun getFavorites(language: String): Flow<Resource<List<FavoriteFossilDto>>>
-
     fun getCommentHistory(): Flow<Resource<List<CommentHistoryDto>>>
+    fun getNews(language: String): Flow<Resource<List<NewsDto>>>
 }

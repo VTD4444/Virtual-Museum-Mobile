@@ -8,8 +8,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
 
     // THAY ĐỔI QUAN TRỌNG: Dùng 10.0.2.2 thay cho localhost
-    private const val BASE_URL = "http://192.168.233.181:5000/"
-//    private const val BASE_URL = "http://10.0.2.2:5000/"
+//    private const val BASE_URL = "http://10.21.66.181:5000/"
+    private const val BASE_URL = "http://10.0.2.2:5000/"
 
     // Interceptor để log các request và response ra Logcat
     private val loggingInterceptor = HttpLoggingInterceptor().apply {

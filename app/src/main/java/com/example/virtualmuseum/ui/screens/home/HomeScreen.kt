@@ -1,6 +1,6 @@
-// In file: ui/screens/home/HomeScreen.kt
 package com.example.virtualmuseum.ui.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,16 +23,25 @@ import androidx.navigation.NavController
 import com.example.virtualmuseum.R
 import com.example.virtualmuseum.ui.components.FeatureCard
 import com.example.virtualmuseum.ui.components.InstructionDialog
+import com.example.virtualmuseum.ui.components.NewsItemCard
 import com.example.virtualmuseum.ui.navigation.Screen
+import androidx.compose.ui.platform.LocalConfiguration
 
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
+    vm: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
     // --- State để quản lý cả 3 dialog ---
     var showQrDialog by remember { mutableStateOf(false) }
     var showSocialDialog by remember { mutableStateOf(false) }
     var showExploreDialog by remember { mutableStateOf(false) }
+    val homeState by vm.state.collectAsState()
+    val configuration = LocalConfiguration.current
+
+    LaunchedEffect(configuration) {
+        vm.loadNews()
+    }
 
     // Box chứa nền và nội dung
     Box(
@@ -182,6 +191,54 @@ fun HomeScreen(
                 onClick = { showExploreDialog = true } // <-- Mở dialog Khám phá
             )
             Spacer(modifier = Modifier.height(60.dp))
+
+            // Tiêu đề mục Tin tức
+            Text(
+                text = stringResource(id = R.string.news_events_title),
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            // Gạch chân tiêu đề
+            Spacer(modifier = Modifier.height(8.dp))
+            Box(
+                modifier = Modifier
+                    .width(60.dp)
+                    .height(4.dp)
+                    .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(2.dp))
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(id = R.string.news_events_subtitle),
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Danh sách tin tức
+            if (homeState.isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            } else if (homeState.newsList.isNotEmpty()) {
+                homeState.newsList.forEach { news ->
+                    NewsItemCard(
+                        news = news,
+                        onClick = {
+                            navController.navigate(Screen.NewsDetail.createRoute(news.id))
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            } else {
+                Text("Không có tin tức nào.", color = Color.Gray, modifier = Modifier.align(Alignment.CenterHorizontally))
+            }
+
+            Spacer(modifier = Modifier.height(80.dp))
         }
     }
 

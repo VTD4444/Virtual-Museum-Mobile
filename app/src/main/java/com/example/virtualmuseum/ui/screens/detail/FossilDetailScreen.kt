@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -133,92 +132,95 @@ fun FossilDetailScreen(
 // --- SECTION 1: 3D MODEL COMPOSABLE ---
 @Composable
 private fun ModelSection(fossil: FossilDetailDto) {
+    // State để quản lý việc hiển thị thông tin (Mặc định là hiện)
     var showInfoOverlay by remember { mutableStateOf(true) }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(1f) // Square aspect ratio
-            .background(Color.DarkGray)
+            .aspectRatio(1f) // Tỷ lệ vuông
+            .background(Color.Transparent)
     ) {
+        // 1. WebView hiển thị Model 3D
         WebViewComponent(
             modifier = Modifier.fillMaxSize(),
-            // Truyền trực tiếp đường dẫn model từ API
-            modelPath = fossil.model3dUrl
+            modelPath = fossil.model3dUrl // Đường dẫn model từ API
         )
 
-        // --- UI ELEMENTS OVER THE WEBVIEW ---
-
-        // Overlay thông tin
+        // 2. Lớp phủ thông tin & Nút bấm (Đặt ở góc trên phải)
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopEnd)
+                .align(Alignment.TopEnd) // Căn toàn bộ cụm sang góc phải trên
                 .padding(8.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.End
         ) {
+            // Khung thông tin (Ẩn/Hiện dựa theo state)
             AnimatedVisibility(
                 visible = showInfoOverlay,
-                modifier = Modifier.padding(end = 8.dp), // Thêm padding
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
                 InfoOverlayContentTopRight(fossil)
             }
 
-            // Nút bật/tắt
+            Spacer(modifier = Modifier.width(8.dp))
+
+            // Nút Bật/Tắt (Luôn hiển thị)
             IconButton(
-                onClick = { showInfoOverlay = !showInfoOverlay },
+                onClick = { showInfoOverlay = !showInfoOverlay }, // Đổi trạng thái khi nhấn
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.7f), CircleShape)
+                    .size(32.dp) // Kích thước nút
             ) {
                 Icon(
                     imageVector = Icons.Default.Info,
-                    contentDescription = stringResource(id = R.string.toggle_info),
-                    tint = MaterialTheme.colorScheme.onSurface
+                    contentDescription = "Bật/Tắt thông tin",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(20.dp)
                 )
             }
         }
     }
 }
 
-// Content of the Info Overlay (Top Right version)
+// Hàm hiển thị nội dung thông tin (Box mờ)
 @Composable
 private fun InfoOverlayContentTopRight(fossil: FossilDetailDto) {
     Column(
         modifier = Modifier
+            .widthIn(max = 220.dp) // Giới hạn chiều rộng tối đa để không che hết model
             .background(
-                color = Color.Black.copy(alpha = 0.6f), // Semi-transparent black
+                color = Color.Black.copy(alpha = 0.6f), // Nền đen mờ
                 shape = RoundedCornerShape(8.dp)
             )
-            .padding(12.dp),
-        horizontalAlignment = Alignment.Start // Align text to the start within the column
+            .padding(12.dp)
     ) {
         InfoOverlayItem(label = stringResource(id = R.string.info_size), value = fossil.size)
         Spacer(modifier = Modifier.height(4.dp))
+
         InfoOverlayItem(label = stringResource(id = R.string.info_weight), value = fossil.weight)
         Spacer(modifier = Modifier.height(4.dp))
+
         InfoOverlayItem(label = stringResource(id = R.string.info_ability), value = fossil.specialAbility)
     }
 }
 
-// Helper for displaying info items in the overlay (no change)
+// Hàm hiển thị từng dòng thông tin nhỏ
 @Composable
 private fun InfoOverlayItem(label: String, value: String?) {
     if (value.isNullOrBlank()) return
-    Row {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "$label: ",
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.labelMedium,
+            text = "$label:",
+            color = MaterialTheme.colorScheme.primary, // Màu vàng cho tiêu đề
+            style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold
         )
         Text(
             text = value,
             color = Color.White,
-            style = MaterialTheme.typography.bodySmall,
-            maxLines = 3 // Limit lines for overlay
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }

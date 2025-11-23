@@ -230,4 +230,18 @@ class MuseumRepositoryImpl (
             }
         } catch (e: Exception) { /* ... */ }
     }
+
+    override fun getNews(language: String): Flow<Resource<List<NewsDto>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.getNews(language)
+            if ((response.success || response.message == "success") && response.data != null) {
+                emit(Resource.Success(response.data))
+            } else {
+                emit(Resource.Error(response.message))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error("Lỗi kết nối: ${e.localizedMessage}"))
+        }
+    }
 }

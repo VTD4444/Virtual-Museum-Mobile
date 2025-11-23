@@ -49,22 +49,57 @@ fun MainScreen(
     val context = LocalContext.current
     val isLoggedIn by TokenManager.isLoggedInFlow.collectAsState(initial = false)
 
-    // Hàm saveMapToDownloads (giữ nguyên)
-    fun saveMapToDownloads() { /* ... */ }
+    // Hàm saveMapToDownloads
+    fun saveMapToDownloads() {
+        try {
+            val drawable = ContextCompat.getDrawable(context, R.drawable.map)
+            val bitmap = (drawable as BitmapDrawable).bitmap
+            val imageCollection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+            } else {
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            }
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Images.Media.DISPLAY_NAME, "museum_map_${System.currentTimeMillis()}.png")
+                put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    put(MediaStore.Images.Media.IS_PENDING, 1)
+                }
+            }
+            val uri = context.contentResolver.insert(imageCollection, contentValues)
+            uri?.let {
+                context.contentResolver.openOutputStream(it)?.use { outputStream ->
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    contentValues.clear()
+                    contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+                    context.contentResolver.update(it, contentValues, null, null)
+                }
+                Toast.makeText(context, "Đã lưu bản đồ!", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(context, "Lưu bản đồ thất bại!", Toast.LENGTH_SHORT).show()
+            e.printStackTrace()
+        }
+    }
 
     // Hàm tiện ích để điều hướng trong BottomBar và Drawer
     fun navigateToTab(route: String) {
         innerNavController.navigate(route) {
-            // Pop up to the start destination of the graph to
-            // avoid building up a large stack of destinations
+            // 1. Xóa sạch backstack cho đến điểm bắt đầu (Home)
+            // Để tránh chồng chất các màn hình khi chuyển tab liên tục
             popUpTo(innerNavController.graph.findStartDestination().id) {
                 saveState = true
             }
-            // Avoid multiple copies of the same destination when
-            // reselecting the same item
+
+            // 2. Tránh mở trùng lặp cùng một màn hình
             launchSingleTop = true
-            // Restore state when reselecting a previously selected item
-            restoreState = true
+
+            // 3. QUAN TRỌNG: Đặt restoreState = false
+            // Điều này buộc tab phải tải lại từ đầu (về trang gốc của tab),
+            // thay vì khôi phục lại trạng thái cũ (ví dụ: trang chi tiết).
+            restoreState = false
         }
     }
 
@@ -130,15 +165,7 @@ fun MainScreen(
                             items = bottomNavItems,
                             currentRoute = currentRoute,
                             onItemClick = { item ->
-                                if (currentRoute != item.route) {
-                                    innerNavController.navigate(item.route) {
-                                        popUpTo(innerNavController.graph.startDestinationId) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                }
+                                navigateToTab(item.route)
                             }
                         )
                     },
@@ -149,7 +176,7 @@ fun MainScreen(
                         innerNavController = innerNavController,
                         modifier = Modifier.padding(innerPadding),
                         onFossilClick = { fossilId ->
-                            rootNavController.navigate(Screen.FossilDetail.createRoute(fossilId))
+                            innerNavController.navigate(Screen.FossilDetail.createRoute(fossilId))
                         },
                         // --- THÊM 2 DÒNG NÀY ---
                         onLoginClick = {

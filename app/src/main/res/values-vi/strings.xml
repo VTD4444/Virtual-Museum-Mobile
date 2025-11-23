@@ -78,4 +78,8 @@
     <string name="account_change_password">Đổi mật khẩu</string>
     <string name="not_logged_in_title">Bạn chưa đăng nhập</string>
     <string name="not_logged_in_desc">Đăng nhập để lưu yêu thích, bình luận và đồng bộ dữ liệu.</string>
+    <string name="news_events_title">Tin Tức &amp; Sự Kiện</string>
+    <string name="news_events_subtitle">Cập nhật những thông tin mới nhất về bảo tàng</string>
+    <string name="news_detail_title">Chi tiết tin tức</string>
+    <string name="news_published_on">Đăng ngày: </string>
 </resources>

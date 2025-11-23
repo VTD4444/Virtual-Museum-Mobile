@@ -10,10 +10,12 @@ import com.example.virtualmuseum.ui.theme.VirtualMuseumTheme
 import com.example.virtualmuseum.ui.navigation.Navigation
 import androidx.compose.material3.Surface
 import androidx.compose.material3.MaterialTheme
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 class MainActivity : AppCompatActivity() {
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContent {
             VirtualMuseumTheme {
